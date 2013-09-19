@@ -1,28 +1,45 @@
 <!DOCTYPE html>
 <html>
-  <head>
-      <title><%= title %></title>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <!-- Bootstrap -->
-      <link href="<%= to("css/bootstrap.min.css") %>" rel="stylesheet" media="screen">
+    <head>
+        <title><%= title %></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <!-- Bootstrap -->
+            <link href="<%= to("css/bootstrap.min.css") %>" 
+                rel="stylesheet" media="screen">
+            <script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
+            <script>
+                tinymce.init({
+                selector:'textarea',
+                content_css : "<%= to('css/tinymce.css?t=')+Time.now.to_i.to_s %>",
+                menubar : false,
+                plugins : "link, image, emoticons",
+                toolbar : "undo redo | styleselect fontsizeselect | bold italic underline bullist numlist | link image | emoticons"
+                });
+            </script>
 
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
+                <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+                <!--[if lt IE 9]>
           <script src="../../assets/js/html5shiv.js"></script>
           <script src="../../assets/js/respond.min.js"></script>
         <![endif]-->
   </head>
   <body>
-    <h1><%= title %></h1>
-    <div class="container">
-        <div>
-            <%= yield %> 
-        </div>
-    </div>
+      <div class="container">
+          <p>
+              <div class="nav nav-pills">
+                  <li <%= "class='active'" if page == :posts %>><a href="<%=to('/')%>">Hem</a></li>
+                  <li <%= "class='active'" if page == :write %>><a href="<%=to('/new_post')%>">Skriv</a></li>
+              </div>
+          </p>
+          <div class="page-header">
+              <h1><%= title %></h1>
+          </div>
+          <%= yield %> 
+      </div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="//code.jquery.com/jquery.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="<%= to("js/bootstrap.min.js") %>"></script>
+      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+      <script src="//code.jquery.com/jquery.js"></script>
+      <!-- Include all compiled plugins (below), or include individual files as needed -->
+      <script src="<%= to("js/bootstrap.min.js") %>"></script>
   </body>
 </html>
