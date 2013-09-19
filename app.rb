@@ -9,6 +9,7 @@ after do
 end
 
 get '/foo/*' do |title|
+    title = "Default" if title.empty?
     erb :index, :locals => {:title => title}
 end
 
