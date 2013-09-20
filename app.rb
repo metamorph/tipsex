@@ -6,7 +6,9 @@ class Post
     @posts = []
 
     def self.create(sender, subject, body)
-        @posts << Post.new(@posts.size, sender, subject, body)
+        post = Post.new(@posts.size, sender, subject, body)
+        @posts << post
+        post
     end
     def self.all
         @posts
@@ -20,6 +22,8 @@ class Post
         puts "INITIALIZING POSTS"
         create("Klas", "Hello", "First post here!")
         create("Anders", "Zip zap", "Foo falkjalk sdhgf akdjf aldjk h ")
+            .add_comment("Stefan", "Jasså?", "sdkfjhaslkdjfhalsdjfh")
+            .add_comment("Anders", "Knappast", "sdkjfhskjdfhh")
         create("Martin", "Lorem fck", "Lorem ipsum dolor sit amet, consectetur
         adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
         magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
@@ -29,10 +33,16 @@ class Post
         sunt in culpa qui officia deserunt mollit anim id est laborum.")
     end
 
-    attr_reader :id, :sender, :subject, :body, :created_at
+    attr_reader :id, :sender, :subject, :body, :created_at, :comments
     def initialize(id, sender, subject, body)
         @id, @sender, @subject, @body, @created_at =
             id, sender, subject, body, Time.now
+        @comments = []
+    end
+
+    def add_comment(sender, subject, body)
+         @comments << Post.create(sender, subject, body)
+         self
     end
 end
 
@@ -52,5 +62,8 @@ end
 post '/new_post' do
     Post.create(request["from"], request["subject"], request["body"])
     redirect to("/posts")
+end
+get '/post/:pid' do |pid|
+   erb :post, :locals => {:title => "Inlägg", :post => Post.find(pid.to_i), :page => :post} 
 end
 

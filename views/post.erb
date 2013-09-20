@@ -1,5 +1,3 @@
-
-<% posts.each do |post| %>
 <div class="panel panel-primary">
     <div class="panel-heading">
         <h3 class="panel-title"><%= post.subject %></h3>
@@ -9,13 +7,7 @@
     </div>
     <div class="panel-footer">
         Avsändare: <%= post.sender %> @ <%= post.created_at %>
-        <p>
-            <% if post.comments.empty? %>
-            Inga kommentarer
-            <% else %>
-                <a href="<%= to("/post/#{post.id}") %>">Kommentarer <span class="badge"><%=post.comments.size%></span></a>
-            <% end %>
-        </p> 
     </div>
+    <!-- TODO: Add comments -->
+    <!-- TODO: Add comment-form -->
 </div>
-<% end %>
