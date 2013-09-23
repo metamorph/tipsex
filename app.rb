@@ -28,9 +28,9 @@ class Post
     def self.init
         puts "INITIALIZING POSTS"
         create("Klas", "Hello", "First post here!")
-        create("Anders", "Zip zap", "Foo falkjalk sdhgf akdjf aldjk h ")
-            .add_comment("Stefan", "Jasså?", "sdkfjhaslkdjfhalsdjfh")
-            .add_comment("Anders", "Knappast", "sdkjfhskjdfhh")
+        create("Anders", "..", "Foo falkjalk sdhgf akdjf aldjk h ")
+            .add_comment("Stefan", "sdkfjhaslkdjfhalsdjfh")
+            .add_comment("Anders", "sdkjfhskjdfhh")
         create("Martin", "Lorem fck", "Lorem ipsum dolor sit amet, consectetur
         adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
         magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
@@ -47,7 +47,7 @@ class Post
         @comments = []
     end
 
-    def add_comment(sender, subject, body)
+    def add_comment(sender, body)
          @comments << Comment.new(sender, body)
          self
     end
@@ -67,11 +67,18 @@ get '/new_post' do
     erb :new_post, :locals => {:title => "Nytt inlägg", :page => :write}
 end
 post '/new_post' do
+    # validate input
     Post.create(request["from"], request["subject"], request["body"])
     redirect to("/posts")
 end
 get '/post/:pid' do |pid|
    erb :post, :locals => {:title => "Inlägg", :post => Post.find(pid.to_i), :page => :post} 
+end
+post '/post/:pid/comment' do |pid|
+    post = Post.find(pid.to_i)
+    raise Sinatra::NotFound unless post
+    post.add_comment(request["from"], request["body"])
+    redirect to("/post/#{pid}")
 end
 get '/faq' do
     erb :faq, :locals => {:title => "FAQ", :page => :faq}

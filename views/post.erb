@@ -1,4 +1,3 @@
-<h3>Add link: <em>Back</em></h3>
 
 <div class="panel panel-primary">
     <div class="panel-heading">
@@ -21,3 +20,19 @@
     </div>
 </div>
 <% end %>
+<div class="panel panel-info">
+<div class="panel-heading"><h3>Lägg till kommentar</h3></div>
+    <div class="panel-body">
+        <form role="form" action="<%=to("/post/#{post.id}/comment")%>" method="post">
+            <div class="form-group">
+                <label for="from">Från</label>
+                <input type="text" class="form-control" id="from" name="from" placeholder="Avsändare"/>
+            </div>
+            <div class="form-group">
+                <label for="body">Meddelande</label>
+                <textarea id="body" name="body" class="form-control" rows="5"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Skicka</button>
+        </form>
+    </div>
+</div>
