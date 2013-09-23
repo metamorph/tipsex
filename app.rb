@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require 'sinatra'
+require 'sinatra/form_helpers'
 
 class Comment
     attr_reader :sender, :body, :created_at
