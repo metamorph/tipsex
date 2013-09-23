@@ -11,7 +11,7 @@
         Avsändare: <%= post.sender %> @ <%= post.created_at %>
         <p>
             <% if post.comments.empty? %>
-            Inga kommentarer
+                <a href="<%= to("/post/#{post.id}") %>">Kommentera</a>
             <% else %>
                 <a href="<%= to("/post/#{post.id}") %>">Kommentarer <span class="badge"><%=post.comments.size%></span></a>
             <% end %>

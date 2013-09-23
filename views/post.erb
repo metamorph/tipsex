@@ -1,3 +1,5 @@
+<h3>Add link: <em>Back</em></h3>
+
 <div class="panel panel-primary">
     <div class="panel-heading">
         <h3 class="panel-title"><%= post.subject %></h3>
@@ -8,6 +10,14 @@
     <div class="panel-footer">
         Avsändare: <%= post.sender %> @ <%= post.created_at %>
     </div>
-    <!-- TODO: Add comments -->
-    <!-- TODO: Add comment-form -->
 </div>
+<% post.comments.each do |comment| %>
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <%= comment.body %>
+    </div>
+    <div class="panel-footer">
+        Avsändare: <%= comment.sender %> @ <%= comment.created_at %>
+    </div>
+</div>
+<% end %>

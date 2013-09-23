@@ -26,9 +26,10 @@
   <body>
       <div class="container">
           <p>
-              <div class="nav nav-pills">
+              <div class="nav nav-tabs">
                   <li <%= "class='active'" if page == :posts %>><a href="<%=to('/')%>">Hem</a></li>
                   <li <%= "class='active'" if page == :write %>><a href="<%=to('/new_post')%>">Skriv</a></li>
+                  <li <%= "class='active'" if page == :faq %>><a href="<%=to('/faq')%>">FAQ</a></li>
               </div>
           </p>
           <div class="page-header">

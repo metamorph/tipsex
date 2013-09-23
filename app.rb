@@ -1,6 +1,13 @@
 #!/usr/bin/env ruby
 require 'sinatra'
 
+class Comment
+    attr_reader :sender, :body, :created_at
+    def initialize(sender, body)
+        @created_at = Time.now
+        @sender, @body = sender, body
+    end
+end
 class Post
     # Static field holding all posts
     @posts = []
@@ -41,7 +48,7 @@ class Post
     end
 
     def add_comment(sender, subject, body)
-         @comments << Post.create(sender, subject, body)
+         @comments << Comment.new(sender, body)
          self
     end
 end
@@ -65,5 +72,8 @@ post '/new_post' do
 end
 get '/post/:pid' do |pid|
    erb :post, :locals => {:title => "Inlägg", :post => Post.find(pid.to_i), :page => :post} 
+end
+get '/faq' do
+    erb :faq, :locals => {:title => "FAQ", :page => :faq}
 end
 
