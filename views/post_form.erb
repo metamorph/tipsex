@@ -5,20 +5,20 @@
 <div class="panel panel-primary">
 <div class="panel-heading"><h3>Skriv ett inlägg</h3></div>
     <div class="panel-body">
-        <form role="form" action="<%=to("/new_post")%>" method="post">
+        <%= form(to("/new_post"), :post) %>
             <div class="form-group">
-                <label for="from">From</label>
-                <input type="text" value="<%= post.from %>" class="form-control" id="from" name="from" placeholder="Avsändare"/>
+                <%= label(:post, :from, "Avsändare") %>
+                <%= input(:post, :from, :class => "form-control", :placeholder => "Avsändare") %>
             </div>
             <div class="form-group">
-                <label for="subject">Ämne</label>
-                <input type="text" class="form-control" id="subject" name="subject" placeholder="Ämne"/>
+                <%= label(:post, :subject, "Ämne") %>
+                <%= input(:post, :subject, :class => "form-control", :placeholder => "Ämne") %>
             </div>
             <div class="form-group">
-                <label for="body">Meddelande</label>
-                <textarea id="body" name="body" class="form-control" rows="5"></textarea>
+                <%= label(:post, :body, "Meddelande") %>
+                <%= textarea(:post, :body, '', :rows => "5", :class => "form-control") %>
             </div>
-            <button type="submit" class="btn btn-primary">Skicka</button>
+            <%= submit("Skicka", :class => "btn btn-primary") %>
         </form>
     </div>
 </div>

@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require 'sinatra'
+require 'sinatra/form_helpers'
 
 class Comment
     attr_reader :sender, :body, :created_at
@@ -67,17 +68,19 @@ get '/new_post' do
     erb :new_post, :locals => {:title => "Nytt inlägg", :page => :write}
 end
 post '/new_post' do
-    # validate input
-    Post.create(request["from"], request["subject"], request["body"])
+    @post = params[:post]
+    # TODO: Validate
+    Post.create(@post["from"], @post["subject"], @post["body"])
     redirect to("/posts")
 end
 get '/post/:pid' do |pid|
    erb :post, :locals => {:title => "Inlägg", :post => Post.find(pid.to_i), :page => :post} 
 end
 post '/post/:pid/comment' do |pid|
+    @post = params[:post]
     post = Post.find(pid.to_i)
     raise Sinatra::NotFound unless post
-    post.add_comment(request["from"], request["body"])
+    post.add_comment(@post["from"], @post["body"])
     redirect to("/post/#{pid}")
 end
 get '/faq' do
