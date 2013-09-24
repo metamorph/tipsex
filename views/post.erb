@@ -7,7 +7,7 @@
         <%= post.body %>
     </div>
     <div class="panel-footer">
-        Avsändare: <%= post.sender %> @ <%= post.created_at %>
+        Avsändare: <%= post.from %> @ <%= _fmt_date(post.created_at) %>
     </div>
 </div>
 <% post.comments.each do |comment| %>
@@ -16,21 +16,21 @@
         <%= comment.body %>
     </div>
     <div class="panel-footer">
-        Avsändare: <%= comment.sender %> @ <%= comment.created_at %>
+        Avsändare: <%= comment.from %> @ <%= _fmt_date(comment.created_at) %>
     </div>
 </div>
 <% end %>
 <div class="panel panel-info">
 <div class="panel-heading"><h3>Lägg till kommentar</h3></div>
     <div class="panel-body">
-        <%= form(to("/post/#{post.id}/comment"), :post) %>
+        <%= form(to("/post/#{post.id}"), :post) %>
             <div class="form-group">
-                <%= label(:post, :from, "Avsändare") %>
-                <%= input(:post, :from, :class => "form-control") %>
+                <%= label(:comment, :from, "Avsändare") %>
+                <%= input(:comment, :from, :class => "form-control") %>
             </div>
             <div class="form-group">
-                <%= label(:post, :body, "Kommentar") %>
-                <%= textarea(:post, :body, '', :class => "form-control", :rows => "5") %>
+                <%= label(:comment, :body, "Kommentar") %>
+                <%= textarea(:comment, :body, '', :class => "form-control", :rows => "5") %>
             </div>
             <%= submit("Skicka", :class => "btn btn-primary") %>
         </form>

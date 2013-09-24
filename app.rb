@@ -1,87 +1,111 @@
 #!/usr/bin/env ruby
+
 require 'sinatra'
 require 'sinatra/form_helpers'
-
-class Comment
-    attr_reader :sender, :body, :created_at
-    def initialize(sender, body)
-        @created_at = Time.now
-        @sender, @body = sender, body
-    end
-end
-class Post
-    # Static field holding all posts
-    @posts = []
-
-    def self.create(sender, subject, body)
-        post = Post.new(@posts.size, sender, subject, body)
-        @posts << post
-        post
-    end
-    def self.all
-        @posts
-    end
-    def self.find(id)
-        @posts.find do |elm|
-            id == elm.id
-        end
-    end
-    def self.init
-        puts "INITIALIZING POSTS"
-        create("Klas", "Hello", "First post here!")
-        create("Anders", "..", "Foo falkjalk sdhgf akdjf aldjk h ")
-            .add_comment("Stefan", "sdkfjhaslkdjfhalsdjfh")
-            .add_comment("Anders", "sdkjfhskjdfhh")
-        create("Martin", "Lorem fck", "Lorem ipsum dolor sit amet, consectetur
-        adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
-        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-        ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-        irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-        sunt in culpa qui officia deserunt mollit anim id est laborum.")
-    end
-
-    attr_reader :id, :sender, :subject, :body, :created_at, :comments
-    def initialize(id, sender, subject, body)
-        @id, @sender, @subject, @body, @created_at =
-            id, sender, subject, body, Time.now
-        @comments = []
-    end
-
-    def add_comment(sender, body)
-         @comments << Comment.new(sender, body)
-         self
-    end
-end
+require 'data_mapper'
+require 'time'
+require 'sinatra/flash'
 
 configure do
-    Post.init 
+    enable :sessions
+    set :session_secret, 'j9f784y9fp8jdf'
+end
+
+DataMapper::setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/guestbook')
+
+class Post
+    include DataMapper::Resource
+
+    property :id, Serial
+    property :from, String, :required => true, :message => {
+        :presence => "Du måste ange en avsändare"}
+    property :subject, String, :required => true, :message => {
+        :presence => "Du måste ange ett ämne"}
+    property :body, Text, :required => true, :message => {
+        :presence => "Du måste skriva ett meddelande"}
+    property :created_at, DateTime, :required => true
+
+    has n, :comments
+
+end
+class Comment
+    include DataMapper::Resource
+
+    property :id, Serial
+    property :from, String, :required => true, :message => {
+        :presence => "Du måste ange en avsändare" }
+    property :body, Text, :required => true, :message => {
+        :presence => "Du måste skriva ett meddelande" }
+    property :created_at, DateTime, :required => true
+
+    belongs_to :post
+end
+
+DataMapper.finalize
+DataMapper.auto_upgrade!
+
+# Some helpers
+helpers do
+    def _fmt_comments(count)
+        case count
+        when 0
+            "Inga kommentarer"
+        when 1
+            "1 kommentar"
+        else
+            "#{count} kommentarer"
+        end
+    end
+    def _fmt_date(date)
+        date.strftime("%H:%M, %Y-%m-%d")
+    end
 end
 
 get '/' do
     redirect to("/posts")
 end
 get '/posts' do 
-    erb :posts, :locals => {:title => "Inlägg", :posts => Post.all.reverse, :page => :posts}
+    erb :posts, :locals => {
+        :posts => Post.all(:order => :id.desc), 
+        :page => :posts}
 end
 get '/new_post' do
-    erb :new_post, :locals => {:title => "Nytt inlägg", :page => :write}
+    @post = Post.new
+    erb :new_post, :locals => {:page => :write}
 end
 post '/new_post' do
-    @post = params[:post]
-    # TODO: Validate
-    Post.create(@post["from"], @post["subject"], @post["body"])
-    redirect to("/posts")
+    @post = Post.new
+    @post.attributes = params[:post].merge(:created_at => Time.now)
+    if @post.save
+        flash[:notice] = "Danke!"
+        redirect to("/posts")
+    else
+        flash[:error] = @post.errors.map do |e|
+            e.first[:presence]
+        end.join("<br/>")
+        erb :new_post, :locals => {:page => :write}
+    end
 end
 get '/post/:pid' do |pid|
-   erb :post, :locals => {:title => "Inlägg", :post => Post.find(pid.to_i), :page => :post} 
+   erb :post, :locals => {
+       :comment => Comment.new,
+       :post => Post.get(pid.to_i), 
+       :page => :post} 
 end
-post '/post/:pid/comment' do |pid|
-    @post = params[:post]
-    post = Post.find(pid.to_i)
-    raise Sinatra::NotFound unless post
-    post.add_comment(@post["from"], @post["body"])
-    redirect to("/post/#{pid}")
+post '/post/:pid' do |pid|
+    @post = Post.get(pid.to_i)
+    @comment = Comment.new
+    @comment.attributes = params[:comment].merge(:created_at => Time.now) 
+    @comment.post = @post
+    if @comment.save
+        flash[:notice] = "Kommentaren tillagd"
+        redirect to("/post/#{pid}")
+    else
+        flash.now[:error] = @comment.errors.map do |e|
+            e.first[:presence]
+        end.join("<br/>")
+        erb :post, :locals => {:page => :post, :post => @post, :comment => @comment}
+    end
 end
 get '/faq' do
     erb :faq, :locals => {:title => "FAQ", :page => :faq}

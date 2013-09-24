@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><%= title %></title>
+        <title>Tipsexs Gästbok</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <!-- Bootstrap -->
             <link href="<%= to("css/bootstrap.min.css") %>" 
@@ -24,20 +24,33 @@
         <![endif]-->
   </head>
   <body>
-      <div class="container">
-          <p>
-              <div class="nav nav-tabs">
-                  <li <%= "class='active'" if page == :posts %>><a href="<%=to('/')%>">Hem</a></li>
-                  <li <%= "class='active'" if page == :write %>><a href="<%=to('/new_post')%>">Skriv</a></li>
-                  <li <%= "class='active'" if page == :faq %>><a href="<%=to('/faq')%>">FAQ</a></li>
-              </div>
-          </p>
-          <%= yield %> 
-      </div>
 
-      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-      <script src="//code.jquery.com/jquery.js"></script>
-      <!-- Include all compiled plugins (below), or include individual files as needed -->
-      <script src="<%= to("js/bootstrap.min.js") %>"></script>
+  <div class="container">
+      <p>
+      <div class="nav nav-tabs">
+          <li <%= "class='active'" if page == :posts %>><a href="<%=to('/')%>">Hem</a></li>
+          <li <%= "class='active'" if page == :write or page == :post %>><a href="<%=to('/new_post')%>">Skriv</a></li>
+          <li <%= "class='active'" if page == :faq %>><a href="<%=to('/faq')%>">FAQ</a></li>
+      </div>
+      </p>
+      <% if flash[:error] %>
+      <div class="alert alert-danger">
+        <%= flash[:error] %>
+      </div>
+      <% end %>
+      <% if flash[:notice] %>
+      <div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <%= flash[:notice] %>
+      </div>
+      <% end %>
+
+      <%= yield %> 
+  </div>
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="//code.jquery.com/jquery.js"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="<%= to("js/bootstrap.min.js") %>"></script>
   </body>
 </html>
