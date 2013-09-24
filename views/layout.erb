@@ -26,6 +26,9 @@
   <body>
 
   <div class="container">
+      <div class="text-info page-header">
+        <h2>Tipsex Gästbook</h2> 
+      </div>
       <p>
       <div class="nav nav-pills">
           <li <%= "class='active'" if page == :posts %>><a href="<%=to('/')%>">Hem</a></li>
@@ -46,6 +49,11 @@
       <% end %>
 
       <%= yield %> 
+  </div>
+  <div id="footer">
+      <div class="container">
+          <p class="pull-right text-muted credit">Copyleft and Right, Tipsex, 1999-<%=Time.now.year%>. <small>email: aengstrom at gnejs dot net</small></p>
+      </div>
   </div>
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
