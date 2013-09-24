@@ -4,6 +4,7 @@
 
 ## TODO
 
++ Paginate the posts
 + Add "last entry" link to front page
 + Add Captcha
 + Add optional authentication using Facebook, Twitter or Google.
