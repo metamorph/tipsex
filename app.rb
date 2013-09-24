@@ -11,6 +11,7 @@ configure do
     set :session_secret, 'j9f784y9fp8jdf'
 end
 
+DataMapper::Logger.new(STDOUT, :debug)
 DataMapper::setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/guestbook')
 
 class Post
@@ -67,9 +68,15 @@ end
 get '/' do
     redirect to("/posts")
 end
-get '/posts' do 
+get '/posts/?:page?' do |page| 
+    @page_current = page.nil? ? 1 : page.to_i
+    @offset = (@page_current - 1) * 5
+    @posts = Post.all(:order => :id.desc, :limit => 5, :offset => @offset)
+    @page_count = (Post.all.count / 5.0).ceil
     erb :posts, :locals => {
-        :posts => Post.all(:order => :id.desc), 
+        :posts => @posts,         
+        :page_count => @page_count,
+        :page_current => @page_current,
         :page => :posts}
 end
 get '/new_post' do

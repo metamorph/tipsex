@@ -27,9 +27,9 @@
 
   <div class="container">
       <p>
-      <div class="nav nav-tabs">
+      <div class="nav nav-pills">
           <li <%= "class='active'" if page == :posts %>><a href="<%=to('/')%>">Hem</a></li>
-          <li <%= "class='active'" if page == :write or page == :post %>><a href="<%=to('/new_post')%>">Skriv</a></li>
+          <li <%= "class='active'" if page == :write or page == :post %>><a href="<%=to('/new_post')%>">Skriv nytt inlägg</a></li>
           <li <%= "class='active'" if page == :faq %>><a href="<%=to('/faq')%>">FAQ</a></li>
       </div>
       </p>

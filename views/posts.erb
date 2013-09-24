@@ -9,12 +9,32 @@
     <div class="panel-footer">
         <p>
             <%= h post.from %> @ <%= _fmt_date(post.created_at) %>
-            <% if post.comments.empty? %>
+            <% if post.comments.count == 0 %>
                        <a href="<%= to("/post/#{post.id}") %>"><span class="label label-default pull-right"><%= _fmt_comments(0) %></span></a>
             <% else %>
-                <a href="<%= to("/post/#{post.id}") %>"><span class="label label-info pull-right"><%= _fmt_comments(post.comments.size) %></span></a>
+                <a href="<%= to("/post/#{post.id}") %>"><span class="label label-info pull-right"><%= _fmt_comments(post.comments.count) %></span></a>
             <% end %>
         </p> 
     </div>
 </div>
 <% end %>
+<ul class="pager">
+    <% if page_current > 1 %>
+    <li>
+        <a href="<%= to("/posts/#{page_current - 1}") %>">&larr; Nyare</a>
+    <% else %>
+    <li class="disabled">
+        <a href="#">&larr; Nyare</a>
+    <% end %>
+    </li>
+    <li><small>Sidan <%= page_current %> av <%= page_count %></small></li>
+    <% if page_current < page_count %>
+    <li>
+        <a href="<%=to("/posts/#{page_current + 1}")%>">Äldre &rarr;</a>
+    <% else %>
+    <li class="disabled">
+        <a href="#">Äldre &rarr;</a>
+    <% end %>
+    </li>
+</ul>
+
