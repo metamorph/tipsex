@@ -59,6 +59,9 @@ helpers do
     def _fmt_date(date)
         date.strftime("%H:%M, %Y-%m-%d")
     end
+    def h(text)
+        Rack::Utils.escape_html(text)
+    end
 end
 
 get '/' do

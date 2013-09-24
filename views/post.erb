@@ -1,13 +1,13 @@
 
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <h3 class="panel-title"><%= post.subject %></h3>
+        <h3 class="panel-title"><%= h post.subject %></h3>
     </div>
     <div class="panel-body">
         <%= post.body %>
     </div>
     <div class="panel-footer">
-        Avsändare: <%= post.from %> @ <%= _fmt_date(post.created_at) %>
+        Avsändare: <%= h post.from %> @ <%= _fmt_date(post.created_at) %>
     </div>
 </div>
 <% post.comments.each do |comment| %>
@@ -16,7 +16,7 @@
         <%= comment.body %>
     </div>
     <div class="panel-footer">
-        Avsändare: <%= comment.from %> @ <%= _fmt_date(comment.created_at) %>
+        Avsändare: <%= h comment.from %> @ <%= _fmt_date(comment.created_at) %>
     </div>
 </div>
 <% end %>
