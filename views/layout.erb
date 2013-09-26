@@ -33,6 +33,7 @@
       <div class="nav nav-pills">
           <li <%= "class='active'" if page == :posts %>><a href="<%=to('/')%>">Hem</a></li>
           <li <%= "class='active'" if page == :write or page == :post %>><a href="<%=to('/new_post')%>">Skriv nytt inlägg</a></li>
+          <li <%= "class='active'" if page == :recent %>><a href="<%=to('/recent')%>">Senaste</a></li>
           <li <%= "class='active'" if page == :faq %>><a href="<%=to('/faq')%>">FAQ</a></li>
       </div>
       </p>

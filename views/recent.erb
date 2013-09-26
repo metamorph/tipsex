@@ -1,0 +1,22 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Nya händelser de senaste 30 dagarna</h3>
+    </div>
+    <div class="panel-body">
+        <div class="list-group">
+        <% @entries.each do |e| %>
+            <% @link_id = e.is_a?(Post) ? e.id : e.post.id %>
+            <a href="<%=to("/post/#{@link_id}")%>" class="list-group-item">
+                <%= hdate(e.created_at) %>
+                <strong><%= e.from %></strong>
+                <% if e.is_a?(Post) %>
+                    skrev <em><%= e.subject %></em>
+                <%else%>
+                    kommenterade på <em><%= e.post.subject %></em>
+                <%end%>
+            </a>
+        <% end %>
+        </div>
+    </div>
+</div>
+

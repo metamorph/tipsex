@@ -63,6 +63,9 @@ helpers do
     def h(text)
         Rack::Utils.escape_html(text)
     end
+    def hdate(date)
+
+    end
 end
 
 get '/' do
@@ -116,6 +119,16 @@ post '/post/:pid' do |pid|
         end.join("<br/>")
         erb :post, :locals => {:page => :post, :post => @post, :comment => @comment}
     end
+end
+# List the recent activities (30 days)
+get '/recent' do
+    # Select them.
+    date_limit = Time.now - (30 * 24 * 60 * 60)
+    posts = Post.all(:created_at.gt => date_limit)
+    comments = Comment.all(:created_at.gt => date_limit)
+    # merge them, ordered by date.
+    @entries = (posts.to_a + comments.to_a).sort{|a,b| b.created_at <=> a.created_at}
+    erb :recent, :locals => {:page => :recent}
 end
 get '/faq' do
     erb :faq, :locals => {:title => "FAQ", :page => :faq}
