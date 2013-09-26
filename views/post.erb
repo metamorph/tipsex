@@ -7,7 +7,7 @@
         <%= post.body %>
     </div>
     <div class="panel-footer">
-        Avsändare: <%= h post.from %> @ <%= _fmt_date(post.created_at) %>
+        Avsändare: <%= h post.from %> @ <%= hdate(post.created_at) %>
     </div>
 </div>
 <% post.comments.each do |comment| %>
@@ -16,7 +16,7 @@
         <%= comment.body %>
     </div>
     <div class="panel-footer">
-        Avsändare: <%= h comment.from %> @ <%= _fmt_date(comment.created_at) %>
+        Avsändare: <%= h comment.from %> @ <%= hdate(comment.created_at) %>
     </div>
 </div>
 <% end %>

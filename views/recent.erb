@@ -7,13 +7,12 @@
         <% @entries.each do |e| %>
             <% @link_id = e.is_a?(Post) ? e.id : e.post.id %>
             <a href="<%=to("/post/#{@link_id}")%>" class="list-group-item">
-                <%= hdate(e.created_at) %>
-                <strong><%= e.from %></strong>
                 <% if e.is_a?(Post) %>
-                    skrev <em><%= e.subject %></em>
+                    <strong><%=e.from%></strong> skrev "<em><%= e.subject %></em>"
                 <%else%>
-                    kommenterade på <em><%= e.post.subject %></em>
+                    <strong><%=e.from%></strong> kommenterade på "<em><%= e.post.subject %></em>"
                 <%end%>
+                <span class="pull-right text-primary"><%= hdate(e.created_at) %></span>
             </a>
         <% end %>
         </div>

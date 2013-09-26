@@ -8,7 +8,7 @@
     </div>
     <div class="panel-footer">
         <p>
-            <%= h post.from %> @ <%= _fmt_date(post.created_at) %>
+            <%= h post.from %> @ <%= hdate(post.created_at) %>
             <% if post.comments.count == 0 %>
                        <a href="<%= to("/post/#{post.id}") %>"><span class="label label-default pull-right"><%= _fmt_comments(0) %></span></a>
             <% else %>

@@ -64,7 +64,20 @@ helpers do
         Rack::Utils.escape_html(text)
     end
     def hdate(date)
-
+        today = Date.today
+        yesterday = today - 1
+        prefix = if today.year == date.year && 
+            today.month == date.month &&
+            today.day == date.day
+            "Idag"
+        elsif yesterday.year == date.year && 
+            yesterday.month == date.month &&
+            yesterday.day == date.day
+            "Igår"
+        else
+            date.strftime("%d/%m")
+        end
+        "#{prefix} #{date.strftime("%H:%M")}"
     end
 end
 
