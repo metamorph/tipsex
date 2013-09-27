@@ -11,7 +11,8 @@ configure do
     set :session_secret, 'j9f784y9fp8jdf'
 end
 
-DataMapper::Logger.new(STDOUT, :debug)
+# Enable to show debug SQL logging
+# DataMapper::Logger.new(STDOUT, :debug)
 DataMapper::setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/guestbook')
 
 class Post
