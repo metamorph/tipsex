@@ -20,6 +20,11 @@
     </div>
 </div>
 <% end %>
+<% if flash[:form_error] %>
+<div class="alert alert-danger">
+    <%= flash[:form_error] %>
+</div>
+<% end %>
 <div class="panel panel-info">
 <div class="panel-heading"><h3>Lägg till kommentar</h3></div>
     <div class="panel-body">

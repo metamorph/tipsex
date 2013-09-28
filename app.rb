@@ -104,10 +104,10 @@ post '/new_post' do
     @post = Post.new
     @post.attributes = params[:post].merge(:created_at => Time.now)
     if @post.save
-        flash[:notice] = "Danke!"
+        flash[:notice] = "Inlägget är publicerat!"
         redirect to("/posts")
     else
-        flash[:error] = @post.errors.map do |e|
+        flash.now[:form_error] = @post.errors.map do |e|
             e.first[:presence]
         end.join("<br/>")
         erb :new_post, :locals => {:page => :write}
@@ -128,7 +128,7 @@ post '/post/:pid' do |pid|
         flash[:notice] = "Kommentaren tillagd"
         redirect to("/post/#{pid}")
     else
-        flash.now[:error] = @comment.errors.map do |e|
+        flash.now[:form_error] = @comment.errors.map do |e|
             e.first[:presence]
         end.join("<br/>")
         erb :post, :locals => {:page => :post, :post => @post, :comment => @comment}

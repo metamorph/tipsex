@@ -2,6 +2,11 @@
     TODO: Define the target of the form, this is dependent on if we're creating
     or updating the post.
 -->
+<% if flash[:form_error] %>
+<div class="alert alert-danger">
+    <%= flash[:form_error] %>
+</div>
+<% end %>
 <div class="panel panel-primary">
 <div class="panel-heading"><h3>Skriv ett inlägg</h3></div>
     <div class="panel-body">
