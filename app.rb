@@ -103,14 +103,19 @@ end
 post '/new_post' do
     @post = Post.new
     @post.attributes = params[:post].merge(:created_at => Time.now)
-    if @post.save
-        flash[:notice] = "Inlägget är publicerat!"
-        redirect to("/posts")
-    else
-        flash.now[:form_error] = @post.errors.map do |e|
-            e.first[:presence]
-        end.join("<br/>")
+    if params[:captcha]["token"] != 'tipsex' 
+        flash.now[:form_error] = "Du glömde det magiska lösenordet!"
         erb :new_post, :locals => {:page => :write}
+    else
+        if @post.save
+            flash[:notice] = "Inlägget är publicerat!"
+            redirect to("/posts")
+        else
+            flash.now[:form_error] = @post.errors.map do |e|
+                e.first[:presence]
+            end.join("<br/>")
+            erb :new_post, :locals => {:page => :write}
+        end
     end
 end
 get '/post/:pid' do |pid|
@@ -124,14 +129,20 @@ post '/post/:pid' do |pid|
     @comment = Comment.new
     @comment.attributes = params[:comment].merge(:created_at => Time.now) 
     @comment.post = @post
-    if @comment.save
-        flash[:notice] = "Kommentaren tillagd"
-        redirect to("/post/#{pid}")
-    else
-        flash.now[:form_error] = @comment.errors.map do |e|
-            e.first[:presence]
-        end.join("<br/>")
+
+    if params[:captcha]["token"] != 'tipsex'
+        flash.now[:form_error] = "Du glömde det magiska lösenordet!"
         erb :post, :locals => {:page => :post, :post => @post, :comment => @comment}
+    else
+        if @comment.save
+            flash[:notice] = "Kommentaren tillagd"
+            redirect to("/post/#{pid}")
+        else
+            flash.now[:form_error] = @comment.errors.map do |e|
+                e.first[:presence]
+            end.join("<br/>")
+            erb :post, :locals => {:page => :post, :post => @post, :comment => @comment}
+        end
     end
 end
 # List the recent activities (30 days)

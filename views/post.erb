@@ -37,6 +37,10 @@
                 <%= label(:comment, :body, "Kommentar") %>
                 <%= textarea(:comment, :body, '', :class => "form-control", :rows => "5") %>
             </div>
+            <div class="form-group">
+                <%= label(:captcha, :token, "Lösenord") %>
+                <%= password(:captcha, :token, :class => 'form-control', :placeholder => "Lösenord", :size => 20) %>
+            </div>
             <%= submit("Skicka", :class => "btn btn-primary") %>
         </form>
     </div>
